@@ -1,0 +1,71 @@
+# Archivos y carpetas generados por Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos de compilación
+bin/
+obj/
+out/
+
+# Archivos de paquetes
+*.nupkg
+*.snupkg
+packages/
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+
+# Archivos de configuración de usuario
+*.ide.config
+*.ide.csproj.user
+
+# Archivos de publicación
+publish/
+app.publish/
+
+# Archivos de dependencias
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de configuración de herramientas
+*.vsconfig
+*.vscode/
+
+# Archivos de seguridad
+secrets.json
+*.key
+
+# Archivos de contenedores y entornos
+docker-compose.override.yml
+.env
+.env.*
+
+# Archivos de logs
+*.log
+logs/
+
+# Archivos de cobertura de pruebas
+*.coverage
+*.coveragexml
+coverage.opencover.xml
+coverage.cobertura.xml
+
+# Archivos de migraciones
+Migrations/
+
+# Archivos de caché
+*.swp
+*.bak
+*.tmp
+*.temp

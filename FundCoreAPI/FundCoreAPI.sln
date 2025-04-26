@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FundCoreAPI", "FundCoreAPI\FundCoreAPI.csproj", "{43CE0F0E-87DA-4ADC-89D9-43E781E5D97A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FundCoreAPI.Tests", "FundCoreAPI.Tests\FundCoreAPI.Tests.csproj", "{C18CAB81-2CB6-4A9E-8365-19DA7D8C938F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{43CE0F0E-87DA-4ADC-89D9-43E781E5D97A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43CE0F0E-87DA-4ADC-89D9-43E781E5D97A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43CE0F0E-87DA-4ADC-89D9-43E781E5D97A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43CE0F0E-87DA-4ADC-89D9-43E781E5D97A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C18CAB81-2CB6-4A9E-8365-19DA7D8C938F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C18CAB81-2CB6-4A9E-8365-19DA7D8C938F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C18CAB81-2CB6-4A9E-8365-19DA7D8C938F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C18CAB81-2CB6-4A9E-8365-19DA7D8C938F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {307388A2-1607-4A95-BB89-2DF1A985DF74}
+	EndGlobalSection
+EndGlobal

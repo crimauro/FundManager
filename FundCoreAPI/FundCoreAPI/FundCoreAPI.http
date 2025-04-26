@@ -1,0 +1,6 @@
+@FundCoreAPI_HostAddress = http://localhost:5124
+
+GET {{FundCoreAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
