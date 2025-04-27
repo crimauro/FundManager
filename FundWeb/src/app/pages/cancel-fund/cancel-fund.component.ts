@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -60,19 +61,21 @@ export class CancelFundComponent implements OnInit {
       notificationType: '',
     };
 
-    const success = this.transactionsService.createTransaction(this.closureTransaction);
-
-    if (success) {
-      this.successMessage = `Se ha cancelado exitosamente la suscripción al fondo ${this.userFund.fundName}`;
-      setTimeout(() => {
-        this.router.navigate(['/dashboard']);
-      }, 2000);
-    } else {
-      this.errorMessage = 'Ha ocurrido un error al procesar la cancelación';
-    }
+    this.transactionsService.createTransaction(this.closureTransaction).subscribe({
+      next: (response) => {
+        console.log('Respuesta del servidor:', response);
+        this.successMessage = `Se ha cancelado exitosamente la suscripción al fondo ${this.userFund?.fundName}`;
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 2000);
+      },
+      error: (err) => {
+        console.error('Error en la petición:', err);
+        this.errorMessage = 'Ha ocurrido un error al procesar la cancelación';
+      }
+    });
+    
   }
 }
-function uuidv4(): string {
-  throw new Error('Function not implemented.');
-}
+
 

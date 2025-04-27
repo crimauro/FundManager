@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -46,22 +47,21 @@ export class SubscribeFundComponent implements OnInit {
   ngOnInit(): void {
     const fundId = Number(this.route.snapshot.paramMap.get('id'));
     
-    this.apiFundsService.getFundById(fundId).subscribe(funds => {
-      console.log('Respuesta del servidor:', funds);
-      this.fund = funds;
-    });
-
-    console.log('Valor de fundId:', this.fund);
-    
-    if (!this.fund) {
-      this.router.navigate(['/dashboard']);
-      return;
-    }
-
-    this.customersService.getCustomerById(this.customerId).pipe(
-      map((customer: Customer) => customer.availableBalance)
-    ).subscribe(balance => {
-      this.availableBalance = balance;
+    this.apiFundsService.getFundById(fundId).subscribe({
+      next: (fund) => {
+       
+        this.fund = fund;
+        
+        this.customersService.getCustomerById(this.customerId).pipe(
+          map((customer: Customer) => customer.availableBalance)
+        ).subscribe(balance => {
+          this.availableBalance = balance;
+        });
+      },
+      error: (err) => {
+        console.error('Error al obtener el fondo:', err);
+        this.router.navigate(['/dashboard']);
+      }
     });
   }
 
@@ -85,19 +85,19 @@ export class SubscribeFundComponent implements OnInit {
       notificationType: this.notificationType,
     };
 
-    const success = this.transactionsService.createTransaction(this.openingTransaction);
-
-    if (success) {
-      this.successMessage = `Se ha suscrito exitosamente al fondo ${this.fund.name}`;
-      setTimeout(() => {
-        this.router.navigate(['/dashboard']);
-      }, 2000);
-    } else {
-      this.errorMessage = 'Ha ocurrido un error al procesar la suscripción';
-    }
+    this.transactionsService.createTransaction(this.openingTransaction).subscribe({
+      next: (response) => {
+        console.log('Respuesta del servidor:', response);
+        this.successMessage = `Se ha suscrito exitosamente al fondo ${this.fund?.name}`;
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 2000);
+      },
+      error: (err) => {
+        console.error('Error en la petición:', err);
+        this.errorMessage = 'Ha ocurrido un error al procesar la suscripción';
+      }
+    });
+    
   }
 }
-function uuidv4(): string {
-  throw new Error('Function not implemented.');
-}
-

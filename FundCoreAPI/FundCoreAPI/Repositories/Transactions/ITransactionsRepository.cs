@@ -34,19 +34,13 @@
         /// <returns>A task representing the asynchronous operation, containing a list of transactions for the specified fund.</returns>
         Task<List<Transaction>> GetTransactionsByFundIdAsync(int fundId);
 
-        /// <summary>
-        /// Retrieves transactions associated with a specific Customer.
-        /// </summary>
-        /// <param name="customerId">The identifier of the customer.</param>
-        /// <returns>A list of transactions associated with the specified customer.</returns>
-        Task<List<Transaction>> GetTransactionsByCustomerIdAsync(string customerId);
 
         /// <summary>
         /// Asynchronously retrieves transactions associated with a specific customer.
         /// </summary>
         /// <param name="CustomerId">The identifier of the customer.</param>
         /// <returns>A task representing the asynchronous operation, containing a list of transactions for the specified customer.</returns>
-        Task<List<Transaction>> GetTransactionsByCustomerIddAsync(int CustomerId);
+        Task<List<Transaction>> GetTransactionsByCustomerIdAsync(string CustomerId);
 
         /// <summary>
         /// Asynchronously deletes a transaction by its unique identifier.

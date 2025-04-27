@@ -20,7 +20,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let fund of availableFunds">
+                    <tr *ngFor="let fund of availableFunds$ | async">
                         <td>{{ fund.name }}</td>
                         <td>COP ${{ fund.minimumAmount | number:'1.0-0' }}</td>
                         <td>

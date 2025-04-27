@@ -182,24 +182,15 @@
             return await _transactionsRepository.GetTransactionsByFundIdAsync(fundId);
         }
 
-        /// <summary>
-        /// Retrieves transactions associated with a specific Customer.
-        /// </summary>
-        /// <param name="customerId">The identifier of the customer.</param>
-        /// <returns>A list of transactions associated with the specified customer.</returns>
-        public async Task<List<Transaction>> GetTransactionsByCustomerIdAsync(string customerId)
-        {
-            return await _transactionsRepository.GetTransactionsByCustomerIdAsync(customerId);
-        }
 
         /// <summary>
         /// Retrieves transactions by customer ID asynchronously.
         /// </summary>
         /// <param name="customerId">The ID of the customer.</param>
         /// <returns>A list of transactions associated with the specified customer.</returns>
-        public async Task<List<Transaction>> GetTransactionsByCustomerIddAsync(int customerId)
+        public async Task<List<Transaction>> GetTransactionsByCustomerIdAsync(string customerId)
         {
-            return await _transactionsRepository.GetTransactionsByCustomerIddAsync(customerId);
+            return await _transactionsRepository.GetTransactionsByCustomerIdAsync(customerId);
         }
 
         /// <summary>

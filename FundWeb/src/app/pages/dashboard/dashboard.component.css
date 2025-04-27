@@ -1,8 +1,11 @@
 .dashboard-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
+    display: flex;
+    flex-direction: column;
+    height: 100vh; 
+    overflow: hidden; 
+    box-sizing: border-box;
+    padding: 0 20px; 
+  }
 
 h1 {
     color: #333;
@@ -29,26 +32,45 @@ section {
     color: #2c3e50;
 }
 
-.funds-table {
-    overflow-x: auto;
+.balance-section {
+    flex: 0 0 auto; 
+    text-align: left; 
+    margin-bottom: 10px;
+    padding-left: 20px; 
 }
 
-table {
-    width: 100%;
+  .funds-table {
+    max-height: 100%; 
+    overflow-y: auto; 
+  }
+
+  .available-funds, .subscribed-funds {
+    flex: 1 1 auto; 
+    overflow-y: auto; 
+    margin-bottom: 10px;
+  }
+
+  table {
+    width: 100%; 
     border-collapse: collapse;
-    margin-top: 10px;
-}
-
-th, td {
-    padding: 12px;
+  }
+  
+  th, td {
+    padding: 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
-}
+  }
 
 th {
     background-color: #f8f9fa;
     font-weight: 600;
 }
+
+thead {
+    position: sticky;
+    top: 0; 
+    background-color: #f9f9f9;
+  }
 
 button {
     padding: 8px 16px;

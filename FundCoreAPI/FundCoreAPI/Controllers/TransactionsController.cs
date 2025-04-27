@@ -107,11 +107,11 @@
         /// <param name="customerId">The ID of the customer to filter transactions by.</param>
         /// <returns>A list of transactions associated with the specified customer ID.</returns>
         [HttpGet("customer/{customerId}")]
-        public async Task<IActionResult> GetTransactionsByCustomerId(int customerId)
+        public async Task<IActionResult> GetTransactionsByCustomerId(string customerId)
         {
             try
             {
-                var transactions = await _transactionsService.GetTransactionsByFundIdAsync(customerId);
+                var transactions = await _transactionsService.GetTransactionsByCustomerIdAsync(customerId);
                 return Ok(transactions);
             }
             catch (Exception ex)

@@ -54,7 +54,13 @@
         /// <returns>A list of linkages associated with the customer.</returns>
         public async Task<List<ActiveLinkages>> GetAllLinkagesAsync(string customerId)
         {
-            return await _dbContext.QueryAsync<ActiveLinkages>(customerId).GetRemainingAsync();
+            //return await _dbContext.QueryAsync<ActiveLinkages>(customerId).GetRemainingAsync();
+            var conditions = new List<ScanCondition>
+                {
+                    new ScanCondition("CustomerId", ScanOperator.Equal, customerId),
+                };
+
+            return await _dbContext.ScanAsync<ActiveLinkages>(conditions).GetRemainingAsync();
         }
 
         /// <summary>

@@ -11,20 +11,9 @@ export class TransactionsService {
 
   constructor(private http: HttpClient) {}
 
-createTransaction(transaction: any): Observable<boolean> {
-    return new Observable<boolean>((observer) => {
-        this.http.post(`${this.baseUrl}`, transaction).subscribe({
-            next: () => {
-                observer.next(true);
-                observer.complete();
-            },
-            error: () => {
-                observer.next(false);
-                observer.complete();
-            }
-        });
-    });
-}
+  createTransaction(transaction: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, transaction);
+  }
 
   getAllTransactions(): Observable<any> {
     return this.http.get(`${this.baseUrl}`);

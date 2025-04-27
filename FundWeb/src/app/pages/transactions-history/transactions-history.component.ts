@@ -6,6 +6,7 @@ import { TransactionsService } from '../../services/transactions.service';
 import { Transaction } from '../../models/transaction.model';
 import { ApiTransaction } from '../../models/api-transaction.model';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {AppConfig} from '../../config/app-config';
 
 @Component({
@@ -23,7 +24,10 @@ export class TransactionsHistoryComponent {
     private fundsService: FundsService,
     private transactionsService: TransactionsService,) {
     this.customerId = (() => AppConfig.userKey)();
-    this.transactions$ = this.transactionsService.getTransactionsByCustomerId(this.customerId);
+    
+    this.transactions$ = this.transactionsService.getTransactionsByCustomerId(this.customerId).pipe(
+      map((transactions: ApiTransaction[]) => transactions.filter((t: ApiTransaction) => t.customerId === this.customerId)
+    ));
   }
 
 }
