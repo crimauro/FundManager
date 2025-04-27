@@ -1,6 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Fund, UserFund } from '../models/fund.model';
+import { ApiFundsService } from '../services/api-funds.service';
+import  {ActiveLinkagesService} from '../services/active-linkages.service';
+import { TransactionsService } from '../services/transactions.service';
+import { NotificationService } from '../services/notification.service';
+import { CustomersService } from '../services/customers.service';
+import { ApiFund } from '../models/api-fund.model';
+import { Customer} from '../models/customer.model';
+import { ApiTransaction } from '../models/api-transaction.model';
+import { ActiveLinkage } from '../models/active-linkage.model'; 
 import { Transaction, NotificationType } from '../models/transaction.model';
 
 @Injectable({
@@ -8,16 +17,28 @@ import { Transaction, NotificationType } from '../models/transaction.model';
 })
 export class FundsService {
   private availableBalance = new BehaviorSubject<number>(10000000); // Initial balance: 10M COP
+  
   private funds: Fund[] = [
     { id: 1, name: 'Fondo Conservador', minimumSubscriptionAmount: 500000 },
     { id: 2, name: 'Fondo Moderado', minimumSubscriptionAmount: 1000000 },
     { id: 3, name: 'Fondo Agresivo', minimumSubscriptionAmount: 2000000 }
   ];
+  private funds1: ApiFund[] = []; // Initialize as an empty array
+
+  constructor(
+    private apiFundsService: ApiFundsService,
+    private activeLinkagesService: ActiveLinkagesService,
+    private transactionsService: TransactionsService,
+    private notificationService: NotificationService,
+    private customersService: CustomersService
+  ) {
+    //this.apiFundsService.getAllFunds().subscribe(funds => {
+    //  this.funds = funds;
+    //});
+  }
   
   private userFunds = new BehaviorSubject<UserFund[]>([]);
   private transactions = new BehaviorSubject<Transaction[]>([]);
-
-  constructor() {}
 
   getAvailableBalance(): Observable<number> {
     return this.availableBalance.asObservable();
@@ -91,7 +112,7 @@ export class FundsService {
       operationType: 'Cancelación',
       amount: userFund.subscribedAmount,
       dateTime: new Date(),
-      notificationType: 'Email' // Default notification type for cancellations
+      notificationType: 'EMAIL' // Default notification type for cancellations
     };
     this.transactions.next([...this.transactions.value, transaction]);
 

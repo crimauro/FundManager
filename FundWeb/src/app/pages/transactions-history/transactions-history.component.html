@@ -14,10 +14,10 @@
             </thead>
             <tbody>
                 <tr *ngFor="let transaction of transactions$ | async">
-                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.transactionId }}</td>
                     <td>{{ transaction.fundName }}</td>
                     <td>{{ transaction.operationType }}</td>
-                    <td>{{ transaction.dateTime | date:'medium' }}</td>
+                    <td>{{ transaction.timestamp | date:'medium' }}</td>
                     <td>{{ transaction.notificationType }}</td>
                 </tr>
             </tbody>

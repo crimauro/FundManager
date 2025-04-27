@@ -1,4 +1,4 @@
-export type NotificationType = 'Email' | 'SMS';
+export type NotificationType = 'EMAIL' | 'SMS';
 export type OperationType = 'Apertura' | 'Cancelación';
 
 export interface Transaction {

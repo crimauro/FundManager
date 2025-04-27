@@ -1,9 +1,9 @@
 <div class="cancel-container" *ngIf="userFund">
-    <h1>Cancelar suscripción al fondo: {{ userFund.name }}</h1>
+    <h1>Cancelar suscripción al fondo: {{ userFund.fundName }}</h1>
 
     <div class="confirmation-section">
         <p class="confirmation-text">¿Está seguro que desea cancelar la suscripción?</p>
-        <p class="amount-info">Se devolverá a su saldo: COP ${{ userFund.subscribedAmount | number:'1.0-0' }}</p>
+        <p class="amount-info">Se devolverá a su saldo: COP ${{ userFund.linkedAmount| number:'1.0-0' }}</p>
     </div>
 
     <div class="error-message" *ngIf="errorMessage">

@@ -175,49 +175,50 @@
                {
                    new Dictionary<string, AttributeValue>
                    {
-                       { "PK", new AttributeValue { S =  "1111" } },
-                       { "IdentificationNumber", new AttributeValue { S = "1111" } },
+                       { "PK", new AttributeValue { S =  "1" } },
+                       { "IdentificationNumber", new AttributeValue { S = "1" } },
                        { "Name", new AttributeValue { S = "Jose" } },
-                       { "AvailableBalance", new AttributeValue { N = "300000.50" } },
+                       { "AvailableBalance", new AttributeValue { N = "500000" } },
                        { "Email", new AttributeValue { S = "customer1@example.com" } },
                        { "Phone", new AttributeValue { S = "1234567890" } }
-                   },
-                   new Dictionary<string, AttributeValue>
-                   {
-                       { "PK", new AttributeValue { S = "2222" } },
-                       { "IdentificationNumber", new AttributeValue { S = "2222" } },
-                       { "Name", new AttributeValue { S = "Diana" } },
-                       { "AvailableBalance", new AttributeValue { N = "50000.75" } },
-                       { "Email", new AttributeValue { S = "customer2@example.com" } },
-                       { "Phone", new AttributeValue { S = "0987654321" } }
-                   },
-                   new Dictionary<string, AttributeValue>
-                   {
-                       { "PK", new AttributeValue { S = "3333"} },
-                       { "IdentificationNumber", new AttributeValue { S = "3333" } },
-                       { "Name", new AttributeValue { S = "Efren" } },
-                       { "AvailableBalance", new AttributeValue { N = "145000.00" } },
-                       { "Email", new AttributeValue { S = "customer3@example.com" } },
-                       { "Phone", new AttributeValue { S = "1122334455" } }
-                   },
-                   new Dictionary<string, AttributeValue>
-                   {
-                       { "PK", new AttributeValue { S = "4444"} },
-                       { "IdentificationNumber", new AttributeValue { S = "4444" } },
-                       { "Name", new AttributeValue { S = "Margaret" } },
-                       { "AvailableBalance", new AttributeValue { N = "280000.00" } },
-                       { "Email", new AttributeValue { S = "customer4@example.com" } },
-                       { "Phone", new AttributeValue { S = "5566778899" } }
-                   },
-                   new Dictionary<string, AttributeValue>
-                   {
-                       { "PK", new AttributeValue { S = "5555" } },
-                       { "IdentificationNumber", new AttributeValue { S = "5555" } },
-                       { "Name", new AttributeValue { S = "James" } },
-                       { "AvailableBalance", new AttributeValue { N = "90000.25" } },
-                       { "Email", new AttributeValue { S = "customer5@example.com" } },
-                       { "Phone", new AttributeValue { S = "6677889900" } }
                    }
+                   //,
+                   //new Dictionary<string, AttributeValue>
+                   //{
+                   //    { "PK", new AttributeValue { S = "2222" } },
+                   //    { "IdentificationNumber", new AttributeValue { S = "2222" } },
+                   //    { "Name", new AttributeValue { S = "Diana" } },
+                   //    { "AvailableBalance", new AttributeValue { N = "50000.75" } },
+                   //    { "Email", new AttributeValue { S = "customer2@example.com" } },
+                   //    { "Phone", new AttributeValue { S = "0987654321" } }
+                   //},
+                   //new Dictionary<string, AttributeValue>
+                   //{
+                   //    { "PK", new AttributeValue { S = "3333"} },
+                   //    { "IdentificationNumber", new AttributeValue { S = "3333" } },
+                   //    { "Name", new AttributeValue { S = "Efren" } },
+                   //    { "AvailableBalance", new AttributeValue { N = "145000.00" } },
+                   //    { "Email", new AttributeValue { S = "customer3@example.com" } },
+                   //    { "Phone", new AttributeValue { S = "1122334455" } }
+                   //},
+                   //new Dictionary<string, AttributeValue>
+                   //{
+                   //    { "PK", new AttributeValue { S = "4444"} },
+                   //    { "IdentificationNumber", new AttributeValue { S = "4444" } },
+                   //    { "Name", new AttributeValue { S = "Margaret" } },
+                   //    { "AvailableBalance", new AttributeValue { N = "280000.00" } },
+                   //    { "Email", new AttributeValue { S = "customer4@example.com" } },
+                   //    { "Phone", new AttributeValue { S = "5566778899" } }
+                   //},
+                   //new Dictionary<string, AttributeValue>
+                   //{
+                   //    { "PK", new AttributeValue { S = "5555" } },
+                   //    { "IdentificationNumber", new AttributeValue { S = "5555" } },
+                   //    { "Name", new AttributeValue { S = "James" } },
+                   //    { "AvailableBalance", new AttributeValue { N = "90000.25" } },
+                   //    { "Email", new AttributeValue { S = "customer5@example.com" } },
+                   //    { "Phone", new AttributeValue { S = "6677889900" } }
+                   //}
                };
 
             foreach (var customer in customersData)

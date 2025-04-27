@@ -72,6 +72,8 @@
                 throw new InvalidOperationException($"The fund with ID {transaction.FundId} does not exist.");
             }
 
+            transaction.FundName = fund.Name;
+
             // Verify if the CustomerId exists in the Customers table
             var customer = await _customersRepository.GetCustomerByIdAsync(transaction.CustomerId);
             if (customer == null)
@@ -85,13 +87,13 @@
                 throw new InvalidOperationException($"The amount must be greater than or equal to the minimum required for the fund {fund.Name}.");
             }
 
-            if (transaction.Type == "OPENING" && customer.AvailableBalance < transaction.Amount)
+            if (transaction.OperationType == "OPENING" && customer.AvailableBalance < transaction.Amount)
             {
                 throw new InvalidOperationException($"Insufficient balance to link to the fund {fund.Name}.");
             }
 
             // Interact with the ActiveLinkages table
-            if (transaction.Type == "OPENING")
+            if (transaction.OperationType == "OPENING")
             {
                 var exists = await _activeLinkagesRepository.GetLinkageByIdAsync(transaction.CustomerId, transaction.FundId);
                 if (exists != null)
@@ -103,6 +105,7 @@
                 await _activeLinkagesRepository.CreateLinkageAsync(new ActiveLinkages
                 {
                     FundId = transaction.FundId,
+                    FundName = fund.Name,
                     CustomerId = transaction.CustomerId,
                     LinkedAmount = transaction.Amount,
                     LinkageDate = DateTime.UtcNow,
@@ -112,7 +115,7 @@
                 // Update the customer's balance
                 customer.AvailableBalance -= transaction.Amount;
             }
-            else if (transaction.Type == "CLOSURE")
+            else if (transaction.OperationType == "CLOSURE")
             {
                 var exists = await _activeLinkagesRepository.GetLinkageByIdAsync(transaction.CustomerId, transaction.FundId);
                 if (exists == null)
@@ -133,18 +136,18 @@
             await _transactionsRepository.CreateTransactionAsync(transaction);
 
             // Send notification
-            if (transaction.ChannelNotification == "EMAIL")
+            if (transaction.NotificationType == "EMAIL")
             {
                 await _notificationService.SendEmailAsync(
                     subject: "Transaction Notification",
-                    message: $"A transaction of type {transaction.Type} for an amount of {transaction.Amount} has been made in the fund {fund.Name}.",
+                    message: $"A transaction of type {transaction.OperationType} for an amount of {transaction.Amount} has been made in the fund {fund.Name}.",
                     email: customer.Email
                 );
             }
-            else if (transaction.ChannelNotification == "SMS")
+            else if (transaction.NotificationType == "SMS")
             {
                 await _notificationService.SendSmsAsync(
-                    message: $"A transaction of type {transaction.Type} for an amount of {transaction.Amount} has been made in the fund {fund.Name}.",
+                    message: $"A transaction of type {transaction.OperationType} for an amount of {transaction.Amount} has been made in the fund {fund.Name}.",
                     phoneNumber: customer.Phone
                 );
             }
@@ -177,6 +180,16 @@
         public async Task<List<Transaction>> GetTransactionsByFundIdAsync(int fundId)
         {
             return await _transactionsRepository.GetTransactionsByFundIdAsync(fundId);
+        }
+
+        /// <summary>
+        /// Retrieves transactions associated with a specific Customer.
+        /// </summary>
+        /// <param name="customerId">The identifier of the customer.</param>
+        /// <returns>A list of transactions associated with the specified customer.</returns>
+        public async Task<List<Transaction>> GetTransactionsByCustomerIdAsync(string customerId)
+        {
+            return await _transactionsRepository.GetTransactionsByCustomerIdAsync(customerId);
         }
 
         /// <summary>

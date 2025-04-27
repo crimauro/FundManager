@@ -21,6 +21,11 @@
         public int FundId { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the fund.
+        /// </summary>
+        public string FundName { get; set; } = string.Empty;
+
+        /// <summary>
         /// Gets or sets the Customer ID associated with the linkage.
         /// </summary>
         public required string CustomerId { get; set; }

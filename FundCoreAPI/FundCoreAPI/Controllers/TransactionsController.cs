@@ -102,6 +102,25 @@
         }
 
         /// <summary>
+        /// Retrieves transactions by customer ID.
+        /// </summary>
+        /// <param name="customerId">The ID of the customer to filter transactions by.</param>
+        /// <returns>A list of transactions associated with the specified customer ID.</returns>
+        [HttpGet("customer/{customerId}")]
+        public async Task<IActionResult> GetTransactionsByCustomerId(int customerId)
+        {
+            try
+            {
+                var transactions = await _transactionsService.GetTransactionsByFundIdAsync(customerId);
+                return Ok(transactions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while retrieving transactions by customer ID.", Details = ex.Message });
+            }
+        }
+
+        /// <summary>
         /// Deletes a transaction by its ID.
         /// </summary>
         /// <param name="transactionId">The ID of the transaction to delete.</param>

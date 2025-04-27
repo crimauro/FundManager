@@ -2,7 +2,7 @@
     <h1>Suscribirse a fondo: {{ fund.name }}</h1>
 
     <div class="info-section">
-        <p class="amount-info">Monto mínimo de suscripción: COP ${{ fund.minimumSubscriptionAmount | number:'1.0-0' }}</p>
+        <p class="amount-info">Monto mínimo de suscripción: COP ${{ fund.minimumAmount| number:'1.0-0' }}</p>
         <p class="balance-info">Saldo disponible: COP ${{ availableBalance | number:'1.0-0' }}</p>
     </div>
 
@@ -13,7 +13,7 @@
                 <label>
                     <input type="radio" name="notificationType" 
                            [(ngModel)]="notificationType" 
-                           value="Email">
+                           value="EMAIL">
                     Notificar por Email
                 </label>
                 <label>

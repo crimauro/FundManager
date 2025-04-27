@@ -71,7 +71,7 @@ namespace FundCoreAPI.Tests
         public async Task CreateTransactionAsync_ShouldThrowException_WhenFundDoesNotExist()
         {
             // Arrange
-            var transaction = new Transaction { FundId = 101, CustomerId = "C1", Amount = 1000, Type = "OPENING" };
+            var transaction = new Transaction { FundId = 101, CustomerId = "C1", Amount = 1000, OperationType = "OPENING" };
 
             _fundsRepositoryMock
                 .Setup(repo => repo.GetFundByIdAsync(transaction.FundId))
@@ -91,7 +91,7 @@ namespace FundCoreAPI.Tests
         public async Task CreateTransactionAsync_ShouldThrowException_WhenCustomerDoesNotExist()
         {
             // Arrange
-            var transaction = new Transaction { FundId = 101, CustomerId = "C1", Amount = 1000, Type = "OPENING" };
+            var transaction = new Transaction { FundId = 101, CustomerId = "C1", Amount = 1000, OperationType = "OPENING" };
 
             _fundsRepositoryMock
                 .Setup(repo => repo.GetFundByIdAsync(transaction.FundId))
@@ -115,7 +115,7 @@ namespace FundCoreAPI.Tests
         public async Task CreateTransactionAsync_ShouldThrowException_WhenAmountIsLessThanMinimum()
         {
             // Arrange
-            var transaction = new Transaction { FundId = 101, CustomerId = "C1", Amount = 400, Type = "OPENING" };
+            var transaction = new Transaction { FundId = 101, CustomerId = "C1", Amount = 400, OperationType = "OPENING" };
 
             _fundsRepositoryMock
                 .Setup(repo => repo.GetFundByIdAsync(transaction.FundId))
@@ -139,7 +139,7 @@ namespace FundCoreAPI.Tests
         public async Task CreateTransactionAsync_ShouldCreateTransaction_WhenValid()
         {
             // Arrange
-            var transaction = new Transaction { FundId = 101, CustomerId = "C1", Amount = 1000, Type = "OPENING", ChannelNotification = "EMAIL" };
+            var transaction = new Transaction { FundId = 101, CustomerId = "C1", Amount = 1000, OperationType = "OPENING",  NotificationType = "EMAIL" };
 
             var fund = new Fund { Id = 101, MinimumAmount = 500, Name = "Test Fund", Category = "FPV" };
             var customer = new Customers { IdentificationNumber = "C1", Name = "Test Customer", AvailableBalance = 2000, Email = "test@example.com" };
@@ -177,8 +177,8 @@ namespace FundCoreAPI.Tests
             // Arrange
             var transactions = new List<Transaction>
                 {
-                    new Transaction { TransactionId = "1", FundId = 101, CustomerId = "C1", Amount = 1000, Type = "OPENING" },
-                    new Transaction { TransactionId = "2", FundId = 102, CustomerId = "C2", Amount = 2000, Type = "CLOSURE" }
+                    new Transaction { TransactionId = "1", FundId = 101, CustomerId = "C1", Amount = 1000, OperationType = "OPENING" },
+                    new Transaction { TransactionId = "2", FundId = 102, CustomerId = "C2", Amount = 2000, OperationType = "CLOSURE" }
                 };
 
             _transactionsRepositoryMock

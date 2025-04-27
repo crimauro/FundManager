@@ -55,6 +55,17 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // URL Angular Application
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 /// <summary>
 /// Configure Amazon DynamoDB client.
 /// </summary>
@@ -91,6 +102,9 @@ builder.Services.AddScoped<IActiveLinkagesService, ActiveLinkagesService>();
 builder.Services.AddAwsNotificationService(builder.Configuration);
 
 var app = builder.Build();
+
+// Use CORS
+app.UseCors("AllowAngularApp");
 
 /// <summary>
 /// Configure the HTTP request pipeline.

@@ -69,6 +69,20 @@
         }
 
         /// <summary>
+        /// Retrieves transactions associated with a specific Customer.
+        /// </summary>
+        /// <param name="customerId">The identifier of the customer.</param>
+        /// <returns>A list of transactions associated with the specified customer.</returns>
+        public async Task<List<Transaction>> GetTransactionsByCustomerIdAsync(string customerId)
+        {
+            var conditions = new List<ScanCondition>
+                {
+                    new ScanCondition("CustomerId", ScanOperator.Equal, customerId)
+                };
+            return await _dbContext.ScanAsync<Transaction>(conditions).GetRemainingAsync();
+        }
+
+        /// <summary>
         /// Deletes a transaction by its unique identifier.
         /// </summary>
         /// <param name="transactionId">The unique identifier of the transaction to delete.</param>

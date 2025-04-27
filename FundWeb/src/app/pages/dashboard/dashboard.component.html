@@ -22,7 +22,7 @@
                 <tbody>
                     <tr *ngFor="let fund of availableFunds">
                         <td>{{ fund.name }}</td>
-                        <td>COP ${{ fund.minimumSubscriptionAmount | number:'1.0-0' }}</td>
+                        <td>COP ${{ fund.minimumAmount | number:'1.0-0' }}</td>
                         <td>
                             <button [routerLink]="['/subscribe', fund.id]" class="btn-subscribe">
                                 Suscribirse
@@ -47,10 +47,10 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let fund of userFunds$ | async">
-                        <td>{{ fund.name }}</td>
-                        <td>COP ${{ fund.subscribedAmount | number:'1.0-0' }}</td>
+                        <td>{{ fund.fundName }}</td>
+                        <td>COP ${{ fund.linkedAmount| number:'1.0-0' }}</td>
                         <td>
-                            <button [routerLink]="['/cancel', fund.id]" class="btn-cancel">
+                            <button [routerLink]="['/cancel', fund.fundId]" class="btn-cancel">
                                 Cancelar Suscripción
                             </button>
                         </td>

@@ -30,9 +30,14 @@
         public int FundId { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the fund associated with the transaction.
+        /// </summary>
+        public string? FundName { get; set; }
+
+        /// <summary>
         /// Gets or sets the type of the transaction (e.g., "OPENING" or "CLOSURE").
         /// </summary>
-        public string Type { get; set; } = string.Empty;
+        public string OperationType { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the amount involved in the transaction.
@@ -47,6 +52,6 @@
         /// <summary>
         /// Gets or sets the notification channel for the transaction (e.g., "EMAIL" or "SMS").
         /// </summary>
-        public string ChannelNotification { get; set; } = string.Empty;
+        public string NotificationType { get; set; } = string.Empty;
     }
 }

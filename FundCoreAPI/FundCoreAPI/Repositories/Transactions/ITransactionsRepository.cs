@@ -35,6 +35,13 @@
         Task<List<Transaction>> GetTransactionsByFundIdAsync(int fundId);
 
         /// <summary>
+        /// Retrieves transactions associated with a specific Customer.
+        /// </summary>
+        /// <param name="customerId">The identifier of the customer.</param>
+        /// <returns>A list of transactions associated with the specified customer.</returns>
+        Task<List<Transaction>> GetTransactionsByCustomerIdAsync(string customerId);
+
+        /// <summary>
         /// Asynchronously retrieves transactions associated with a specific customer.
         /// </summary>
         /// <param name="CustomerId">The identifier of the customer.</param>
