@@ -1,0 +1,94 @@
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: #444;
+    margin-bottom: 20px;
+}
+
+section {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.balance {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.funds-table {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn-subscribe {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-subscribe:hover {
+    background-color: #45a049;
+}
+
+.btn-cancel {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #da190b;
+}
+
+.btn-history {
+    background-color: #2196F3;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+}
+
+.btn-history:hover {
+    background-color: #1976D2;
+}
+
+.history-button {
+    text-align: center;
+    margin-top: 20px;
+}

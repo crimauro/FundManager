@@ -1,0 +1,97 @@
+.subscribe-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.info-section {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.amount-info, .balance-info {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #2c3e50;
+}
+
+.notification-section {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.success-message {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+button {
+    padding: 12px 24px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn-confirm {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-confirm:hover {
+    background-color: #45a049;
+}
+
+.btn-cancel {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #da190b;
+}

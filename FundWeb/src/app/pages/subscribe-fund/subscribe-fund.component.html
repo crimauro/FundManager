@@ -1,0 +1,45 @@
+<div class="subscribe-container" *ngIf="fund">
+    <h1>Suscribirse a fondo: {{ fund.name }}</h1>
+
+    <div class="info-section">
+        <p class="amount-info">Monto mínimo de suscripción: COP ${{ fund.minimumSubscriptionAmount | number:'1.0-0' }}</p>
+        <p class="balance-info">Saldo disponible: COP ${{ availableBalance | number:'1.0-0' }}</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" #subscribeForm="ngForm">
+        <div class="notification-section">
+            <h3>Seleccione medio de notificación:</h3>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="notificationType" 
+                           [(ngModel)]="notificationType" 
+                           value="Email">
+                    Notificar por Email
+                </label>
+                <label>
+                    <input type="radio" name="notificationType" 
+                           [(ngModel)]="notificationType" 
+                           value="SMS">
+                    Notificar por SMS
+                </label>
+            </div>
+        </div>
+
+        <div class="error-message" *ngIf="errorMessage">
+            {{ errorMessage }}
+        </div>
+
+        <div class="success-message" *ngIf="successMessage">
+            {{ successMessage }}
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn-confirm">
+                Confirmar Suscripción
+            </button>
+            <button type="button" routerLink="/dashboard" class="btn-cancel">
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>

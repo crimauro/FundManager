@@ -1,0 +1,32 @@
+<div class="history-container">
+    <h1>Historial de Transacciones</h1>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Transacción</th>
+                    <th>Nombre del Fondo</th>
+                    <th>Tipo de Operación</th>
+                    <th>Fecha y Hora</th>
+                    <th>Medio de Notificación</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let transaction of transactions$ | async">
+                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.fundName }}</td>
+                    <td>{{ transaction.operationType }}</td>
+                    <td>{{ transaction.dateTime | date:'medium' }}</td>
+                    <td>{{ transaction.notificationType }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="button-container">
+        <button routerLink="/dashboard" class="btn-back">
+            Volver al Dashboard
+        </button>
+    </div>
+</div>
