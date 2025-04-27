@@ -4,17 +4,29 @@
     using FundCoreAPI.Services.ActiveLinkages;
     using Microsoft.AspNetCore.Mvc;
 
+    /// <summary>
+    /// Controller for managing active linkages.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class ActiveLinkagesController : ControllerBase
     {
         private readonly IActiveLinkagesService _activeLinkagesService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ActiveLinkagesController"/> class.
+        /// </summary>
+        /// <param name="activeLinkagesService">Service for managing active linkages.</param>
         public ActiveLinkagesController(IActiveLinkagesService activeLinkagesService)
         {
             _activeLinkagesService = activeLinkagesService;
         }
 
+        /// <summary>
+        /// Creates a new linkage.
+        /// </summary>
+        /// <param name="linkage">The linkage to create.</param>
+        /// <returns>An action result indicating the outcome of the operation.</returns>
         [HttpPost]
         public async Task<IActionResult> CreateLinkage([FromBody] ActiveLinkages linkage)
         {
@@ -29,6 +41,12 @@
             }
         }
 
+        /// <summary>
+        /// Retrieves a linkage by its customer ID and fund ID.
+        /// </summary>
+        /// <param name="customerId">The customer ID.</param>
+        /// <param name="fundId">The fund ID.</param>
+        /// <returns>The requested linkage, if found.</returns>
         [HttpGet("{customerId}/{fundId}")]
         public async Task<IActionResult> GetLinkageById(string customerId, int fundId)
         {
@@ -47,6 +65,11 @@
             }
         }
 
+        /// <summary>
+        /// Retrieves all linkages for a specific customer.
+        /// </summary>
+        /// <param name="customerId">The customer ID.</param>
+        /// <returns>A list of linkages associated with the customer.</returns>
         [HttpGet("{customerId}")]
         public async Task<IActionResult> GetAllLinkages(string customerId)
         {
@@ -61,6 +84,12 @@
             }
         }
 
+        /// <summary>
+        /// Retrieves linkages for a specific customer filtered by category.
+        /// </summary>
+        /// <param name="customerId">The customer ID.</param>
+        /// <param name="category">The category to filter by.</param>
+        /// <returns>A list of linkages matching the specified category.</returns>
         [HttpGet("{customerId}/category/{category}")]
         public async Task<IActionResult> GetLinkagesByCategory(string customerId, string category)
         {
@@ -75,6 +104,12 @@
             }
         }
 
+        /// <summary>
+        /// Deletes a linkage by its customer ID and fund ID.
+        /// </summary>
+        /// <param name="customerId">The customer ID.</param>
+        /// <param name="fundId">The fund ID.</param>
+        /// <returns>An action result indicating the outcome of the operation.</returns>
         [HttpDelete("{customerId}/{fundId}")]
         public async Task<IActionResult> DeleteLinkage(string customerId, int fundId)
         {

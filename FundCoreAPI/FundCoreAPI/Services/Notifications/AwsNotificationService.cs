@@ -5,12 +5,31 @@ namespace FundCoreAPI.Services.Notifications
     using Amazon.SimpleNotificationService;
     using Amazon.SimpleNotificationService.Model;
     using FundCoreAPI.Configuration;
+    /// <summary>
+    /// Service for sending notifications using AWS SNS.
+    /// </summary>
     public class AwsNotificationService : INotificationService
     {
+        /// <summary>
+        /// AWS SNS client instance.
+        /// </summary>
         private readonly AmazonSimpleNotificationServiceClient _snsClient;
+
+        /// <summary>
+        /// The ARN of the SNS topic.
+        /// </summary>
         private readonly string _topicArn;
+
+        /// <summary>
+        /// Logger instance for logging information and errors.
+        /// </summary>
         private readonly ILogger<AwsNotificationService> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AwsNotificationService"/> class.
+        /// </summary>
+        /// <param name="configuration">Application configuration settings.</param>
+        /// <param name="logger">Logger instance.</param>
         public AwsNotificationService(IConfiguration configuration, ILogger<AwsNotificationService> logger)
         {
             var settings = configuration.GetSection("AwsNotificationSettings").Get<AwsNotificationSettings>();
@@ -25,6 +44,13 @@ namespace FundCoreAPI.Services.Notifications
                 region);
         }
 
+        /// <summary>
+        /// Sends an email notification using AWS SNS.
+        /// </summary>
+        /// <param name="subject">The subject of the email.</param>
+        /// <param name="message">The body of the email.</param>
+        /// <param name="email">The recipient's email address.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating success or failure.</returns>
         public async Task<bool> SendEmailAsync(string subject, string message, string email)
         {
             try
@@ -34,15 +60,15 @@ namespace FundCoreAPI.Services.Notifications
                     Subject = subject,
                     Message = message,
                     MessageAttributes = new Dictionary<string, MessageAttributeValue>
-                    {
                         {
-                            "email", new MessageAttributeValue
                             {
-                                DataType = "String",
-                                StringValue = email
+                                "email", new MessageAttributeValue
+                                {
+                                    DataType = "String",
+                                    StringValue = email
+                                }
                             }
-                        }
-                    },
+                        },
                     TargetArn = _topicArn
                 };
 
@@ -57,6 +83,12 @@ namespace FundCoreAPI.Services.Notifications
             }
         }
 
+        /// <summary>
+        /// Sends an SMS notification using AWS SNS.
+        /// </summary>
+        /// <param name="message">The SMS message content.</param>
+        /// <param name="phoneNumber">The recipient's phone number.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating success or failure.</returns>
         public async Task<bool> SendSmsAsync(string message, string phoneNumber)
         {
             try
@@ -66,15 +98,15 @@ namespace FundCoreAPI.Services.Notifications
                     Message = message,
                     PhoneNumber = phoneNumber,
                     MessageAttributes = new Dictionary<string, MessageAttributeValue>
-                    {
                         {
-                            "AWS.SNS.SMS.SMSType", new MessageAttributeValue
                             {
-                                DataType = "String",
-                                StringValue = "Transactional" // Puede ser "Promotional" también
+                                "AWS.SNS.SMS.SMSType", new MessageAttributeValue
+                                {
+                                    DataType = "String",
+                                    StringValue = "Transactional" // Can also be "Promotional"
+                                }
                             }
                         }
-                    }
                 };
 
                 var response = await _snsClient.PublishAsync(request);
@@ -88,6 +120,12 @@ namespace FundCoreAPI.Services.Notifications
             }
         }
 
+        /// <summary>
+        /// Sends a notification to an SNS topic.
+        /// </summary>
+        /// <param name="subject">The subject of the notification.</param>
+        /// <param name="message">The body of the notification.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating success or failure.</returns>
         public async Task<bool> SendToTopicAsync(string subject, string message)
         {
             try

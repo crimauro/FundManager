@@ -7,6 +7,9 @@
     using FundCoreAPI.Repositories.Transactions;
     using FundCoreAPI.Services.Notifications;
 
+    /// <summary>
+    /// Service responsible for handling transaction-related operations.
+    /// </summary>
     public class TransactionsService : ITransactionsService
     {
         private readonly ITransactionsRepository _transactionsRepository;
@@ -15,6 +18,14 @@
         private readonly INotificationService _notificationService;
         private readonly IActiveLinkagesRepository _activeLinkagesRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TransactionsService"/> class with all dependencies.
+        /// </summary>
+        /// <param name="transactionsRepository">Repository for transaction operations.</param>
+        /// <param name="fundsRepository">Repository for fund operations.</param>
+        /// <param name="customersRepository">Repository for customer operations.</param>
+        /// <param name="notificationService">Service for sending notifications.</param>
+        /// <param name="activeLinkagesRepository">Repository for active linkages operations.</param>
         public TransactionsService(
             ITransactionsRepository transactionsRepository,
             IFundsRepository fundsRepository,
@@ -28,53 +39,67 @@
             _notificationService = notificationService;
             _activeLinkagesRepository = activeLinkagesRepository;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TransactionsService"/> class with only the transactions repository.
+        /// </summary>
+        /// <param name="transactionsRepository">Repository for transaction operations.</param>
         public TransactionsService(ITransactionsRepository transactionsRepository)
         {
             _transactionsRepository = transactionsRepository;
         }
 
+        /// <summary>
+        /// Creates a simple transaction asynchronously.
+        /// </summary>
+        /// <param name="transaction">The transaction to be created.</param>
         public async Task CreateTransactionSimpleAsync(Transaction transaction)
         {
             await _transactionsRepository.CreateTransactionAsync(transaction);
         }
 
+        /// <summary>
+        /// Creates a transaction asynchronously with validations and additional operations.
+        /// </summary>
+        /// <param name="transaction">The transaction to be created.</param>
+        /// <exception cref="InvalidOperationException">Thrown when validation fails.</exception>
         public async Task CreateTransactionAsync(Transaction transaction)
         {
-            // Verificar si el FundId existe en la tabla Funds
+            // Verify if the FundId exists in the Funds table
             var fund = await _fundsRepository.GetFundByIdAsync(transaction.FundId);
             if (fund == null)
             {
-                throw new InvalidOperationException($"El fondo con ID {transaction.FundId} no existe.");
+                throw new InvalidOperationException($"The fund with ID {transaction.FundId} does not exist.");
             }
 
-            // Verificar si el CustomerId existe en la tabla Customers
+            // Verify if the CustomerId exists in the Customers table
             var customer = await _customersRepository.GetCustomerByIdAsync(transaction.CustomerId);
             if (customer == null)
             {
-                throw new InvalidOperationException($"El cliente con ID {transaction.CustomerId} no existe.");
+                throw new InvalidOperationException($"The customer with ID {transaction.CustomerId} does not exist.");
             }
 
-            // Verificar si el Amount es mayor o igual al MinimumAmount del fondo
+            // Verify if the Amount is greater than or equal to the MinimumAmount of the fund
             if (transaction.Amount < fund.MinimumAmount)
             {
-                throw new InvalidOperationException($"El monto debe ser mayor o igual al mínimo requerido del fondo {fund.Name}.");
+                throw new InvalidOperationException($"The amount must be greater than or equal to the minimum required for the fund {fund.Name}.");
             }
 
             if (transaction.Type == "OPENING" && customer.AvailableBalance < transaction.Amount)
             {
-                throw new InvalidOperationException($"No tiene saldo disponible para vincularse al fondo {fund.Name}.");
+                throw new InvalidOperationException($"Insufficient balance to link to the fund {fund.Name}.");
             }
 
-            // Interactuar con la tabla ActiveLinkages
+            // Interact with the ActiveLinkages table
             if (transaction.Type == "OPENING")
             {
                 var exists = await _activeLinkagesRepository.GetLinkageByIdAsync(transaction.CustomerId, transaction.FundId);
                 if (exists != null)
                 {
-                    throw new InvalidOperationException($"El fondo {fund.Name} ya tiene una apertura para el cliente {customer.Name}.");
+                    throw new InvalidOperationException($"The fund {fund.Name} already has an opening for the customer {customer.Name}.");
                 }
 
-                // Registrar la vinculación
+                // Register the linkage
                 await _activeLinkagesRepository.CreateLinkageAsync(new ActiveLinkages
                 {
                     FundId = transaction.FundId,
@@ -83,7 +108,8 @@
                     LinkageDate = DateTime.UtcNow,
                     Category = fund.Category
                 });
-                //Actualiza el monto del cliente
+
+                // Update the customer's balance
                 customer.AvailableBalance -= transaction.Amount;
             }
             else if (transaction.Type == "CLOSURE")
@@ -91,59 +117,82 @@
                 var exists = await _activeLinkagesRepository.GetLinkageByIdAsync(transaction.CustomerId, transaction.FundId);
                 if (exists == null)
                 {
-                    throw new InvalidOperationException($"El fondo {fund.Name} no tiene una apertura para el cliente {customer.Name}.");
+                    throw new InvalidOperationException($"The fund {fund.Name} does not have an opening for the customer {customer.Name}.");
                 }
 
-                // Eliminar la vinculación
+                // Remove the linkage
                 await _activeLinkagesRepository.DeleteLinkageAsync(transaction.CustomerId, transaction.FundId);
 
-                //Actualiza el monto del cliente
+                // Update the customer's balance
                 customer.AvailableBalance += exists.LinkedAmount;
             }
 
             await _customersRepository.UpdateCustomerAsync(customer);
 
-            // Guardar la transacción
+            // Save the transaction
             await _transactionsRepository.CreateTransactionAsync(transaction);
 
-            // Enviar notificación
+            // Send notification
             if (transaction.ChannelNotification == "EMAIL")
             {
                 await _notificationService.SendEmailAsync(
-                    subject: "Notificación de Transacción",
-                    message: $"Se ha realizado una transacción de tipo {transaction.Type} por un monto de {transaction.Amount} en el fondo {fund.Name}.",
+                    subject: "Transaction Notification",
+                    message: $"A transaction of type {transaction.Type} for an amount of {transaction.Amount} has been made in the fund {fund.Name}.",
                     email: customer.Email
                 );
             }
             else if (transaction.ChannelNotification == "SMS")
             {
                 await _notificationService.SendSmsAsync(
-                    message: $"Se ha realizado una transacción de tipo {transaction.Type} por un monto de {transaction.Amount} en el fondo {fund.Name}.",
+                    message: $"A transaction of type {transaction.Type} for an amount of {transaction.Amount} has been made in the fund {fund.Name}.",
                     phoneNumber: customer.Phone
                 );
             }
         }
 
+        /// <summary>
+        /// Retrieves a transaction by its ID asynchronously.
+        /// </summary>
+        /// <param name="transactionId">The ID of the transaction to retrieve.</param>
+        /// <returns>The transaction if found; otherwise, null.</returns>
         public async Task<Transaction?> GetTransactionByIdAsync(string transactionId)
         {
             return await _transactionsRepository.GetTransactionByIdAsync(transactionId);
         }
 
+        /// <summary>
+        /// Retrieves all transactions asynchronously.
+        /// </summary>
+        /// <returns>A list of all transactions.</returns>
         public async Task<List<Transaction>> GetAllTransactionsAsync()
         {
             return await _transactionsRepository.GetAllTransactionsAsync();
         }
 
+        /// <summary>
+        /// Retrieves transactions by fund ID asynchronously.
+        /// </summary>
+        /// <param name="fundId">The ID of the fund.</param>
+        /// <returns>A list of transactions associated with the specified fund.</returns>
         public async Task<List<Transaction>> GetTransactionsByFundIdAsync(int fundId)
         {
             return await _transactionsRepository.GetTransactionsByFundIdAsync(fundId);
         }
 
+        /// <summary>
+        /// Retrieves transactions by customer ID asynchronously.
+        /// </summary>
+        /// <param name="customerId">The ID of the customer.</param>
+        /// <returns>A list of transactions associated with the specified customer.</returns>
         public async Task<List<Transaction>> GetTransactionsByCustomerIddAsync(int customerId)
         {
             return await _transactionsRepository.GetTransactionsByCustomerIddAsync(customerId);
         }
 
+        /// <summary>
+        /// Deletes a transaction by its ID asynchronously.
+        /// </summary>
+        /// <param name="transactionId">The ID of the transaction to delete.</param>
         public async Task DeleteTransactionAsync(string transactionId)
         {
             await _transactionsRepository.DeleteTransactionAsync(transactionId);

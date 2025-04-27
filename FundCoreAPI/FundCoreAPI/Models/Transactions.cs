@@ -2,18 +2,51 @@
 {
     using Amazon.DynamoDBv2.DataModel;
 
+    /// <summary>
+    /// Represents a transaction entity stored in the DynamoDB "Transactions" table.
+    /// </summary>
     [DynamoDBTable("Transactions")]
     public class Transaction
     {
+        /// <summary>
+        /// Gets or sets the partition key (Primary Key) for the transaction.
+        /// </summary>
         [DynamoDBHashKey] // Partition Key
         public string PK { get; set; } = Guid.NewGuid().ToString();
+
+        /// <summary>
+        /// Gets or sets the unique identifier for the transaction.
+        /// </summary>
         public string TransactionId { get; set; } = Guid.NewGuid().ToString();
 
+        /// <summary>
+        /// Gets or sets the identifier of the customer associated with the transaction.
+        /// </summary>
         public required string CustomerId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the identifier of the fund associated with the transaction.
+        /// </summary>
         public int FundId { get; set; }
-        public string Type { get; set; } = string.Empty; // Example: "OPENING" or "CLOSURE"
+
+        /// <summary>
+        /// Gets or sets the type of the transaction (e.g., "OPENING" or "CLOSURE").
+        /// </summary>
+        public string Type { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the amount involved in the transaction.
+        /// </summary>
         public decimal Amount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the timestamp of when the transaction occurred.
+        /// </summary>
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
-        public string ChannelNotification { get; set; } = string.Empty; // Example: "EMAIL" or "SMS"
+
+        /// <summary>
+        /// Gets or sets the notification channel for the transaction (e.g., "EMAIL" or "SMS").
+        /// </summary>
+        public string ChannelNotification { get; set; } = string.Empty;
     }
 }

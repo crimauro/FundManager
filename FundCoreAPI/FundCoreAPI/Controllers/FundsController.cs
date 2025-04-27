@@ -6,17 +6,29 @@ namespace FundCoreAPI.Controllers
     using FundCoreAPI.Services.Funds;
     using Microsoft.AspNetCore.Mvc;
 
+    /// <summary>
+    /// Controller for managing fund-related operations.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class FundsController : ControllerBase
     {
         private readonly IFundsService _fundsService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FundsController"/> class.
+        /// </summary>
+        /// <param name="fundsService">Service for handling fund operations.</param>
         public FundsController(IFundsService fundsService)
         {
             _fundsService = fundsService;
         }
 
+        /// <summary>
+        /// Creates a new fund.
+        /// </summary>
+        /// <param name="fund">The fund to create.</param>
+        /// <returns>An <see cref="IActionResult"/> indicating the result of the operation.</returns>
         [HttpPost]
         public async Task<IActionResult> CreateFund([FromBody] Fund fund)
         {
@@ -31,6 +43,11 @@ namespace FundCoreAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Retrieves a fund by its ID.
+        /// </summary>
+        /// <param name="fundId">The ID of the fund to retrieve.</param>
+        /// <returns>An <see cref="IActionResult"/> containing the fund or a not found result.</returns>
         [HttpGet("{fundId}")]
         public async Task<IActionResult> GetFundById(int fundId)
         {
@@ -49,6 +66,10 @@ namespace FundCoreAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Retrieves all funds.
+        /// </summary>
+        /// <returns>An <see cref="IActionResult"/> containing the list of funds.</returns>
         [HttpGet]
         public async Task<IActionResult> GetAllFunds()
         {
@@ -63,6 +84,12 @@ namespace FundCoreAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates an existing fund.
+        /// </summary>
+        /// <param name="fundId">The ID of the fund to update.</param>
+        /// <param name="fund">The updated fund data.</param>
+        /// <returns>An <see cref="IActionResult"/> indicating the result of the operation.</returns>
         [HttpPut("{fundId}")]
         public async Task<IActionResult> UpdateFund(string fundId, [FromBody] Fund fund)
         {
@@ -82,6 +109,11 @@ namespace FundCoreAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a fund by its ID.
+        /// </summary>
+        /// <param name="fundId">The ID of the fund to delete.</param>
+        /// <returns>An <see cref="IActionResult"/> indicating the result of the operation.</returns>
         [HttpDelete("{fundId}")]
         public async Task<IActionResult> DeleteFund(int fundId)
         {

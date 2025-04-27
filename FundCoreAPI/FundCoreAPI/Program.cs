@@ -12,12 +12,15 @@ using FundCoreAPI.Services.ActiveLinkages;
 using FundCoreAPI.Services.Customers;
 using FundCoreAPI.Services.Funds;
 using FundCoreAPI.Services.Transactions;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Cargar secretos desde AWS Secrets Manager
+/// <summary>
+/// Load secrets from AWS Secrets Manager.
+/// </summary>
 var secretsManagerClient = new AmazonSecretsManagerClient();
-var secretName = "FundManagerAppSecrets"; // Nombre del secreto
+var secretName = "FundManagerAppSecrets"; // Secret name
 var secretValueResponse = await secretsManagerClient.GetSecretValueAsync(new GetSecretValueRequest
 {
     SecretId = secretName
@@ -25,6 +28,9 @@ var secretValueResponse = await secretsManagerClient.GetSecretValueAsync(new Get
 
 if (secretValueResponse.SecretString != null)
 {
+    /// <summary>
+    /// Add secrets to the configuration.
+    /// </summary>
     var secrets = new ConfigurationBuilder()
         .AddJsonStream(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(secretValueResponse.SecretString)))
         .Build();
@@ -32,17 +38,26 @@ if (secretValueResponse.SecretString != null)
     builder.Configuration.AddConfiguration(secrets);
 }
 
-// AWS Configuration
+/// <summary>
+/// AWS Configuration.
+/// </summary>
 AwsSettings awsOptions = builder.Configuration.GetSection("AWS").Get<AwsSettings>()!;
 
-
-
-// Add services to the container.
-
+/// <summary>
+/// Add services to the container.
+/// </summary>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
 
+/// <summary>
+/// Configure Amazon DynamoDB client.
+/// </summary>
 var config = new AmazonDynamoDBConfig
 {
     RegionEndpoint = RegionEndpoint.GetBySystemName(awsOptions.Region)
@@ -53,6 +68,9 @@ builder.Services.AddSingleton<IAmazonDynamoDB>(sp =>
     return new AmazonDynamoDBClient(awsOptions.AccessKey, awsOptions.SecretKey, config);
 });
 
+/// <summary>
+/// Create and initialize DynamoDB tables.
+/// </summary>
 var tableCreator = new DynamoDBTableCreator(new AmazonDynamoDBClient(awsOptions.AccessKey, awsOptions.SecretKey, config));
 await tableCreator.CreateFundsTableAsync();
 await tableCreator.InsertFundsDataAsync();
@@ -74,8 +92,9 @@ builder.Services.AddAwsNotificationService(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
+/// <summary>
+/// Configure the HTTP request pipeline.
+/// </summary>
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -84,6 +103,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 
+/// <summary>
+/// Map controllers and default route.
+/// </summary>
 app.MapControllers();
 app.MapGet("/", context =>
 {
