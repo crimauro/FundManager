@@ -1,4 +1,4 @@
-# Use a Node.js base image to build the application
+# Use a Node.js base image for both build and serving
 FROM node:23-bullseye-slim AS build
 
 # Set the working directory
@@ -14,16 +14,22 @@ RUN npm install
 COPY . .
 
 # Build the Angular application
-RUN npm run build -- --output-path=dist/fundweb --configuration production
+RUN npm run build
 
-# Use an Nginx base image to serve the application
-FROM nginx:alpine
+# Final stage with minimal footprint
+FROM node:23-bullseye-slim
 
-# Copy the built files to the Nginx directory
-COPY --from=build /app/dist/fundweb /usr/share/nginx/html
+# Set working directory
+WORKDIR /app
+
+# Install http-server globally
+RUN npm install -g http-server
+
+# Copy only the built application from the build stage
+COPY --from=build /app/dist/fundweb /app
 
 # Expose port 80
 EXPOSE 80
 
-# Command to start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Command to start http-server (serving from current directory)
+CMD ["http-server", "browser","-p", "80", "--cors", "-c-1"]
