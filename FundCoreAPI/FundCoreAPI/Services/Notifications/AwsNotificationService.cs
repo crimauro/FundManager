@@ -32,15 +32,18 @@ namespace FundCoreAPI.Services.Notifications
         /// <param name="logger">Logger instance.</param>
         public AwsNotificationService(IConfiguration configuration, ILogger<AwsNotificationService> logger)
         {
-            var settings = configuration.GetSection("AwsNotificationSettings").Get<AwsNotificationSettings>();
+            var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
+            var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
+            var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
+            var awsTopicArn = Environment.GetEnvironmentVariable("AWS_TOPIC_ARN");
 
             _logger = logger;
-            _topicArn = settings.TopicArn;
+            _topicArn = awsTopicArn;
 
-            var region = RegionEndpoint.GetBySystemName(settings.Region);
+            var region = RegionEndpoint.GetBySystemName(awsRegion);
             _snsClient = new AmazonSimpleNotificationServiceClient(
-                settings.AccessKey,
-                settings.SecretKey,
+                awsAccessKey,
+                awsSecretKey,
                 region);
         }
 

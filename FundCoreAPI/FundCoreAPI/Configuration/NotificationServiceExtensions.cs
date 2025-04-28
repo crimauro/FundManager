@@ -18,44 +18,39 @@ namespace FundCoreAPI.Configuration
         /// <returns>The updated service collection.</returns>  
         public static IServiceCollection AddAwsNotificationService(this IServiceCollection services, IConfiguration configuration)
         {
-            // Load secrets from AWS Secrets Manager  
-            var secretsManagerClient = new AmazonSecretsManagerClient();
-            var secretName = "FundManagerAppSecrets"; // Secret name  
-            var secretValueResponse = secretsManagerClient.GetSecretValueAsync(new GetSecretValueRequest
+            /// <summary>
+            /// Load credentials.
+            /// </summary>
+            var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
+            var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
+            var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
+            var awsTopicArn = Environment.GetEnvironmentVariable("AWS_TOPIC_ARN");
+
+            var awsNotificationSettings = new AwsNotificationSettings
             {
-                SecretId = secretName
-            }).Result;
+                /// <summary>  
+                /// The AWS region for the notification service.  
+                /// </summary>  
+                Region = awsRegion,
 
-            if (secretValueResponse.SecretString != null)
-            {
-                // Deserialize secrets and map them to AwsNotificationSettings  
-                var secrets = JsonSerializer.Deserialize<Dictionary<string, string>>(secretValueResponse.SecretString);
-                var awsNotificationSettings = new AwsNotificationSettings
-                {
-                    /// <summary>  
-                    /// The AWS region for the notification service.  
-                    /// </summary>  
-                    Region = secrets["AwsNotificationSettings:Region"],
+                /// <summary>  
+                /// The AWS access key for authentication.  
+                /// </summary>  
+                AccessKey = awsAccessKey,
 
-                    /// <summary>  
-                    /// The AWS access key for authentication.  
-                    /// </summary>  
-                    AccessKey = secrets["AwsNotificationSettings:AccessKey"],
+                /// <summary>  
+                /// The AWS secret key for authentication.  
+                /// </summary>  
+                SecretKey = awsSecretKey,
 
-                    /// <summary>  
-                    /// The AWS secret key for authentication.  
-                    /// </summary>  
-                    SecretKey = secrets["AwsNotificationSettings:SecretKey"],
+                /// <summary>  
+                /// The ARN of the AWS SNS topic.  
+                /// </summary>  
+                TopicArn = awsTopicArn
+            };
 
-                    /// <summary>  
-                    /// The ARN of the AWS SNS topic.  
-                    /// </summary>  
-                    TopicArn = secrets["AwsNotificationSettings:TopicArn"]
-                };
-
-                // Register AwsNotificationSettings as a singleton service  
-                services.AddSingleton(awsNotificationSettings);
-            }
+            // Register AwsNotificationSettings as a singleton service  
+            services.AddSingleton(awsNotificationSettings);
 
             // Register the notification service  
             services.AddSingleton<INotificationService, AwsNotificationService>();

@@ -1,8 +1,6 @@
 using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using Amazon.SecretsManager.Model;
-using Amazon.SecretsManager;
 using FundCoreAPI.Configuration;
 using FundCoreAPI.Repositories.ActiveLinkages;
 using FundCoreAPI.Repositories.Customers;
@@ -15,33 +13,28 @@ using FundCoreAPI.Services.Transactions;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://*:60721");
 
 /// <summary>
-/// Load secrets from AWS Secrets Manager.
+/// Load credentials.
 /// </summary>
-var secretsManagerClient = new AmazonSecretsManagerClient();
-var secretName = "FundManagerAppSecrets"; // Secret name
-var secretValueResponse = await secretsManagerClient.GetSecretValueAsync(new GetSecretValueRequest
-{
-    SecretId = secretName
-});
+var awsAccessKey = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID");
+var awsSecretKey = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
+var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
 
-if (secretValueResponse.SecretString != null)
+if (string.IsNullOrEmpty(awsAccessKey) || string.IsNullOrEmpty(awsSecretKey) || string.IsNullOrEmpty(awsRegion))
 {
-    /// <summary>
-    /// Add secrets to the configuration.
-    /// </summary>
-    var secrets = new ConfigurationBuilder()
-        .AddJsonStream(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(secretValueResponse.SecretString)))
-        .Build();
-
-    builder.Configuration.AddConfiguration(secrets);
+    throw new Exception("AWS environment variables are not set.");
 }
 
 /// <summary>
 /// AWS Configuration.
 /// </summary>
-AwsSettings awsOptions = builder.Configuration.GetSection("AWS").Get<AwsSettings>()!;
+AwsSettings awsOptions = new AwsSettings 
+{   AccessKey  = awsAccessKey, 
+    SecretKey = awsSecretKey, 
+    Region = awsRegion 
+};
 
 /// <summary>
 /// Add services to the container.
@@ -58,11 +51,11 @@ builder.Services.AddSwaggerGen(c =>
 // Add CORS policy
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") // URL Angular Application
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.AllowAnyOrigin() 
+             .AllowAnyHeader() 
+             .AllowAnyMethod(); 
     });
 });
 
@@ -104,7 +97,7 @@ builder.Services.AddAwsNotificationService(builder.Configuration);
 var app = builder.Build();
 
 // Use CORS
-app.UseCors("AllowAngularApp");
+app.UseCors("AllowAll");
 
 /// <summary>
 /// Configure the HTTP request pipeline.
