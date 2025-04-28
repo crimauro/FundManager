@@ -9,6 +9,7 @@ FundCoreAPI es un proyecto basado en **ASP.NET Core** que implementa un Web API 
 ### Frameworks y herramientas principales:
 - **ASP.NET Core**: Framework para construir aplicaciones web y servicios RESTful de alto rendimiento.
 - **Amazon DynamoDB**: Base de datos NoSQL utilizada para almacenar datos relacionados con fondos, clientes, transacciones y vínculos activos.
+- **Amazon SNS**: Notificaciones a EMails y SMS
 - **Swagger/OpenAPI**: Herramienta para documentar y probar los endpoints del Web API.
 - **CORS (Cross-Origin Resource Sharing)**: Configurado para permitir solicitudes desde cualquier origen, facilitando la interacción con clientes externos.
 
@@ -64,7 +65,7 @@ Si alguna de estas variables no está configurada, la aplicación lanzará una e
 
 ---
 
-## Ejecución del proyecto
+## Ejecución del proyecto sin Contenerizar
 
 1. Clona este repositorio:
 git clone https://github.com/tu-usuario/FundCoreAPI.git cd FundCoreAPI
@@ -99,8 +100,7 @@ dotnet test
 
 1. **Angular**: Framework de desarrollo frontend basado en TypeScript que permite construir aplicaciones web dinámicas y escalables. Angular proporciona herramientas como enrutamiento, inyección de dependencias y un sistema de componentes reutilizables.
 2. **Node.js**: Utilizado como entorno de ejecución para construir y empaquetar la aplicación Angular. Node.js permite la instalación de dependencias y la ejecución de scripts de construcción mediante `npm`.
-3. **Nginx**: Servidor web ligero y de alto rendimiento utilizado para servir los archivos estáticos generados por Angular. Nginx es ideal para aplicaciones web debido a su capacidad de manejar múltiples conexiones concurrentes.
-4. **Docker**: Herramienta de contenerización que permite empaquetar la aplicación y sus dependencias en un contenedor portátil. Esto asegura que la aplicación se ejecute de manera consistente en cualquier entorno.
+3. **Docker**: Herramienta de contenerización que permite empaquetar la aplicación y sus dependencias en un contenedor portátil. Esto asegura que la aplicación se ejecute de manera consistente en cualquier entorno.
 
 ### Arquitectura Limpia
 
@@ -121,16 +121,6 @@ La aplicación sigue principios de arquitectura limpia, organizando el código e
 
 4. **Capa de Configuración**:
    - Centraliza configuraciones como la URL base de la API en archivos como [`environment.ts`](src/environments/environment.ts), lo que facilita la gestión de entornos (desarrollo, producción, etc.).
-
-### Contenerización con Docker
-
-La aplicación está contenerizada utilizando Docker, lo que asegura que pueda ejecutarse de manera consistente en cualquier entorno. El archivo [`Dockerfile`](Dockerfile) realiza los siguientes pasos:
-
-1. Construye la aplicación Angular utilizando una imagen base de Node.js.
-2. Sirve los archivos estáticos generados con un servidor Nginx.
-3. Expone el puerto 80 para acceder a la aplicación.
-
-Este enfoque simplifica el despliegue y asegura que la aplicación sea portable y fácil de configurar.
 
 
 ---
